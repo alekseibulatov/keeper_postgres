@@ -3,7 +3,7 @@ package com.bulatov.entity;
 public class AccountEntity {
     private int id;
     private String name;
-    private String value;
+    private int value;
 
     public int getId() {
         return id;
@@ -23,14 +23,12 @@ public class AccountEntity {
         return this;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
-    public AccountEntity setValue(String value) {
+    public AccountEntity setValue(int value) {
         this.value = value;
         return this;
     }
-
-
 }
