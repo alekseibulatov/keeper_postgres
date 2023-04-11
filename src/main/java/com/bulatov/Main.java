@@ -1,23 +1,27 @@
 package com.bulatov;
 
-import com.bulatov.db.DataSourceProvider;
+import com.bulatov.db.AccountRepository;
+import com.bulatov.db.impl.PostgresAccountRepository;
 import com.bulatov.entity.AccountEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.swing.*;
 
 public class Main {
+
+    static AccountRepository accountRepository = new PostgresAccountRepository();
+
     public static void main(String[] args) {
-        JdbcTemplate template = 
-                new JdbcTemplate(DataSourceProvider.INSTANCE.getDataSource());
+        String accountName = JOptionPane.showInputDialog("Представьтесь, пожалуйста");
+        AccountEntity workAccount = accountRepository.getByName(accountName);
+        if (workAccount == null) {
+            int balance = Integer.parseInt(JOptionPane.showInputDialog("Введите баланс:"));
 
-        String accountName = JOptionPane.showInputDialog("Введите ваше имя:");
-        int balance = Integer.parseInt(JOptionPane.showInputDialog("Введите баланс:"));
+            AccountEntity account = new AccountEntity()
+                    .setName(accountName)
+                    .setValue(balance);
 
-        AccountEntity account = new AccountEntity()
-                .setName(accountName)
-                .setValue(balance);
+            accountRepository.addAccount(account);
 
-        template.update("INSERT INTO account (name, value) values (? , ?) ", account.getName(), account.getValue());
+        }
     }
 }
